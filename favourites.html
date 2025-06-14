@@ -71,7 +71,7 @@
     }
 
     .update-button {
-      background-color: #007bff;
+      background-color: #dc3545;
       color: white;
       border: none;
       padding: 5px 10px;
@@ -100,44 +100,77 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./core/supabase.js"></script>
   <script>
-
-
-
     // Load offers when page is ready
     document.addEventListener('DOMContentLoaded', async () => {
-      // Listen for auth state changes (handles both refresh and direct navigation)
       window.supabaseClient.auth.onAuthStateChange((event, session) => {
         console.log('Auth state changed:', event, session);
         if (session) {
-          fetchOffers();
+          fetchFavorites();
         } else {
           displayNotLoggedIn();
         }
       });
 
-      // Also manually check session on page load (optional, improves UX)
       const { data: { session }, error } = await window.supabaseClient.auth.getSession();
       console.log('Session on load:', session);
 
       if (session) {
-        fetchOffers();
+        fetchFavorites();
       } else {
         displayNotLoggedIn();
       }
     });
 
+    async function fetchFavorites() {
+      const { data: { session } } = await window.supabaseClient.auth.getSession();
+      if (!session) {
+        displayNotLoggedIn();
+        return;
+      }
 
-    async function fetchOffers() {
-      const response = await fetch(`${BASE_URL}/rest/v1/offers`, {
-        headers: {
-          apikey: API_KEY,
-          Authorization: `Bearer ${API_KEY}`
-        }
-      });
+      const { data: favorites, error } = await window.supabaseClient
+        .from('favorites')
+        .select(`
+      id,
+      hypermarkets:hypermarket_id (
+        id, name, location, phone, description, website
+      )
+    `)
+        .eq('user_id', session.user.id);
 
-      const offers = await response.json();
+      if (error) {
+        console.error('Error fetching favorites:', error);
+        return;
+      }
+
+      if (!favorites || favorites.length === 0) {
+        displayNoFavorites();
+        return;
+      }
+
+      const offers = favorites.map(fav => ({
+        favorite_id: fav.id,
+        ...fav.hypermarkets
+      }));
+
       displayOffers(offers);
     }
+
+
+    function displayNoFavorites() {
+      const container = document.getElementById('offers-container');
+      container.innerHTML = `
+    <div style="text-align: center; margin-top: 50px;">
+      <h3>You have no favorite offers yet.</h3>
+      <button onclick="redirectToHome()" style="padding: 10px 20px; font-size: 16px;">Go to Offers</button>
+    </div>
+  `;
+    }
+
+    function redirectToHome() {
+      window.location.href = 'index.html'; // Change this to your main offers page
+    }
+
 
     function displayOffers(offers) {
       const container = document.getElementById('offers-container');
@@ -148,46 +181,36 @@
         offerCard.className = 'offer-card';
 
         offerCard.innerHTML = `
-                    <div class="offer-content">
-                        <div class="offer-title">${offer.title}</div>
-                        <div class="offer-description">${offer.description}</div>
-                        <div class="offer-price">Price: $${offer.price} | Discount: ${offer.discount}%</div>
-                    </div>
-                    <div>
-                        <span class="heart-icon" onclick="toggleFavorite(this)">&#10084;</span>
-                        <button class="update-button" onclick="updateOffer('${offer.id}')">Update</button>
-                    </div>
-                `;
+          <div class="offer-content">
+              <div class="offer-title">${offer.title}</div>
+              <div class="offer-description">${offer.description}</div>
+              <div class="offer-price">Price: $${offer.price} | Discount: ${offer.discount}%</div>
+          </div>
+          <div>
+              <span class="heart-icon favorited" onclick="removeFavorite('${offer.favorite_id}')">&#10084;</span>
+          </div>
+        `;
 
         container.appendChild(offerCard);
       });
     }
 
-    function toggleFavorite(element) {
-      element.classList.toggle('favorited');
-    }
+    async function removeFavorite(favoriteId) {
+      if (!confirm('Are you sure you want to remove this from your favorites?')) return;
 
-    async function updateOffer(offerId) {
-      const newTitle = prompt('Enter new offer title:');
-      if (!newTitle) return;
+      const { error } = await window.supabaseClient
+        .from('favorites')
+        .delete()
+        .eq('id', favoriteId);
 
-      const response = await fetch(`${BASE_URL}/rest/v1/offers?id=eq.${offerId}`, {
-        method: 'PATCH',
-        headers: {
-          'apikey': API_KEY,
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ title: newTitle })
-      });
-
-      if (response.ok) {
-        alert('Offer updated successfully!');
-        fetchOffers(); // Refresh list
+      if (error) {
+        alert('Failed to remove favorite.');
       } else {
-        alert('Failed to update offer.');
+        alert('Favorite removed successfully!');
+        fetchFavorites(); // Refresh list
       }
     }
+
     function displayNotLoggedIn() {
       const container = document.getElementById('offers-container');
       container.innerHTML = `
@@ -195,14 +218,12 @@
             <h3>You are not logged in</h3>
             <button onclick="redirectToLogin()" style="padding: 10px 20px; font-size: 16px;">Login</button>
         </div>
-    `;
+      `;
     }
 
     function redirectToLogin() {
-      // Redirect to your login page
-      window.location.href = 'login.html'; // Change this to your actual login page
+      window.location.href = 'login.html';
     }
-
   </script>
 
   <script type="module">

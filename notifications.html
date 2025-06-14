@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Notification</title>
+  <title>Notifications</title>
 
   <link href="css/bootstrap.min.css" rel="stylesheet" />
   <link href="css/style.css" rel="stylesheet" />
@@ -33,34 +33,35 @@
       padding: 20px;
     }
 
-    .offer-card {
+    .notification-card {
       background-color: white;
       border-radius: 10px;
       padding: 15px 20px;
       margin-bottom: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    .offer-content {
-      max-width: 85%;
-    }
-
-    .offer-title {
+    .notification-message {
       font-weight: bold;
       margin-bottom: 8px;
     }
 
-    .heart-icon {
-      font-size: 24px;
-      color: red;
+    .notification-type {
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .mark-read-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
       cursor: pointer;
     }
 
-    .favorited {
-      color: #e60023;
+    .read {
+      opacity: 0.6;
     }
 
     footer {
@@ -69,15 +70,6 @@
       text-align: center;
       padding: 15px 0;
     }
-
-    .update-button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
   </style>
 </head>
 
@@ -85,11 +77,11 @@
   <div id="wrapper">
 
     <header>
-      <h2>Notification</h2>
+      <h2>Notifications</h2>
     </header>
 
-    <main id="offers-container">
-      <!-- Offers will be loaded here -->
+    <main id="notifications-container">
+      <!-- Notifications will be loaded here -->
     </main>
 
     <footer id="footer">
@@ -97,112 +89,101 @@
     </footer>
 
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./core/supabase.js"></script>
   <script>
-
-
-
-    // Load offers when page is ready
     document.addEventListener('DOMContentLoaded', async () => {
-      // Listen for auth state changes (handles both refresh and direct navigation)
       window.supabaseClient.auth.onAuthStateChange((event, session) => {
-        console.log('Auth state changed:', event, session);
         if (session) {
-          fetchOffers();
+          fetchNotifications(session.user.id);
         } else {
           displayNotLoggedIn();
         }
       });
 
-      // Also manually check session on page load (optional, improves UX)
-      const { data: { session }, error } = await window.supabaseClient.auth.getSession();
-      console.log('Session on load:', session);
-
+      const { data: { session } } = await window.supabaseClient.auth.getSession();
       if (session) {
-        fetchOffers();
+        fetchNotifications(session.user.id);
       } else {
         displayNotLoggedIn();
       }
     });
 
-
-    async function fetchOffers() {
-      const response = await fetch(`${BASE_URL}/rest/v1/offers`, {
+    async function fetchNotifications(userId) {
+      const response = await fetch(`${BASE_URL}/rest/v1/notifications?user_id=eq.${userId}&order=created_at.desc`, {
         headers: {
           apikey: API_KEY,
           Authorization: `Bearer ${API_KEY}`
         }
       });
 
-      const offers = await response.json();
-      displayOffers(offers);
+      const notifications = await response.json();
+      displayNotifications(notifications);
     }
 
-    function displayOffers(offers) {
-      const container = document.getElementById('offers-container');
+    function displayNotifications(notifications) {
+      const container = document.getElementById('notifications-container');
       container.innerHTML = '';
 
-      offers.forEach(offer => {
-        const offerCard = document.createElement('div');
-        offerCard.className = 'offer-card';
+      if (notifications.length === 0) {
+        container.innerHTML = '<p>No notifications found.</p>';
+        if (session) {
+          console.log('User ID:', session.user.id); // 👉 This is the user_id you need
+        }
+        return;
+      }
 
-        offerCard.innerHTML = `
-                    <div class="offer-content">
-                        <div class="offer-title">${offer.title}</div>
-                        <div class="offer-description">${offer.description}</div>
-                        <div class="offer-price">Price: $${offer.price} | Discount: ${offer.discount}%</div>
-                    </div>
-                    <div>
-                        <span class="heart-icon" onclick="toggleFavorite(this)">&#10084;</span>
-                        <button class="update-button" onclick="updateOffer('${offer.id}')">Update</button>
-                    </div>
-                `;
+      notifications.forEach(notification => {
+        const card = document.createElement('div');
+        card.className = `notification-card ${notification.read ? 'read' : ''}`;
 
-        container.appendChild(offerCard);
+        card.innerHTML = `
+          <div class="notification-message">${notification.message}</div>
+          <div class="notification-type">Type: ${notification.type}</div>
+          <div class="notification-date">Received: ${new Date(notification.created_at).toLocaleString()}</div>
+          ${notification.read ? '<span style="color: green;">Read</span>' : `<button class="mark-read-button" onclick="markAsRead('${notification.id}')">Mark as Read</button>`}
+        `;
+
+        container.appendChild(card);
       });
     }
 
-    function toggleFavorite(element) {
-      element.classList.toggle('favorited');
-    }
-
-    async function updateOffer(offerId) {
-      const newTitle = prompt('Enter new offer title:');
-      if (!newTitle) return;
-
-      const response = await fetch(`${BASE_URL}/rest/v1/offers?id=eq.${offerId}`, {
+    async function markAsRead(notificationId) {
+      const response = await fetch(`${BASE_URL}/rest/v1/notifications?id=eq.${notificationId}`, {
         method: 'PATCH',
         headers: {
           'apikey': API_KEY,
           'Authorization': `Bearer ${API_KEY}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ title: newTitle })
+        body: JSON.stringify({ read: true })
       });
 
       if (response.ok) {
-        alert('Offer updated successfully!');
-        fetchOffers(); // Refresh list
+        alert('Notification marked as read.');
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (session) {
+          fetchNotifications(session.user.id);
+        }
       } else {
-        alert('Failed to update offer.');
+        alert('Failed to mark notification as read.');
       }
     }
+
     function displayNotLoggedIn() {
-      const container = document.getElementById('offers-container');
+      const container = document.getElementById('notifications-container');
       container.innerHTML = `
         <div style="text-align: center; margin-top: 50px;">
-            <h3>You are not logged in</h3>
-            <button onclick="redirectToLogin()" style="padding: 10px 20px; font-size: 16px;">Login</button>
+          <h3>You are not logged in</h3>
+          <button onclick="redirectToLogin()" style="padding: 10px 20px; font-size: 16px;">Login</button>
         </div>
-    `;
+      `;
     }
 
     function redirectToLogin() {
-      // Redirect to your login page
-      window.location.href = 'login.html'; // Change this to your actual login page
+      window.location.href = 'login.html';
     }
-
   </script>
 
   <script type="module">
