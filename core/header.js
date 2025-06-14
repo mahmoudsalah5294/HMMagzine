@@ -104,7 +104,7 @@ export function injectHeader() {
         <span class="header-icon" title="Notifications">
           <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-1.5 2h15z"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
         </span>
-        <span class="header-icon" title="Favorites">
+        <span class="header-icon" title="Favorites" onclick="window.location.href='favourites.html'">
           <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0l-.9.9-.9-.9a5.5 5.5 0 00-7.8 7.8l.9.9L12 21.3l8.7-8.7.9-.9a5.5 5.5 0 000-7.8z"/></svg>
         </span>
         <span class="header-icon" title="Account">
