@@ -1,123 +1,73 @@
 <!DOCTYPE html>
-<html class="no-js">
-
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Signup (Supabase)</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/style.css" rel="stylesheet" />
-    <link rel="shortcut icon" href="img/favicon.ico">
-
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f1efee;
-        }
-
-        #wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .signup-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        input, button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
-        .link {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .link a {
-            text-decoration: none;
-            color: #007bff;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyper Offers - Create Account</title>
+    <link rel="stylesheet" href="login.css">
 </head>
-
 <body>
-    <div id="wrapper">
-        <div class="signup-card">
-            <h2>Signup</h2>
-            <input type="text" id="name" placeholder="Name" required />
-            <input type="email" id="email" placeholder="Email" required />
-            <input type="password" id="password" placeholder="Password" required />
-            <button onclick="signup()">Signup</button>
-
-            <div class="link">
-                <p>Already have an account? <a href="login.html">Login</a></p>
+    <header>
+        <div class="top-bar">
+            <div class="logo">Hyper offers</div>
+            <nav>
+                <a href="#">Offers</a>
+                <a href="#">Markets</a>
+                <a href="#">Categories</a>
+            </nav>
+            <div class="search-bar">
+                <input type="text" placeholder="Search for products">
+                <span class="search-icon">🔍</span>
+            </div>
+            <div class="icons">
+                <span>🔔</span>
+                <span>❤️</span>
+                <span>👤</span>
             </div>
         </div>
-    </div>
+    </header>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./core/supabase.js"></script>
+    <main>
+        <section class="form-container">
+            <h1>CREATE YOUR ACCOUNT</h1>
+            <p>Please enter your details.</p>
+            <form>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="phone" placeholder="Enter your phone">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </section>
+    </main>
 
-    <script>
-        async function signup() {
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            if (!name || !email || !password) {
-                alert('Please fill all fields');
-                return;
-            }
-
-            // Sign up with Supabase Auth
-            const { data, error } = await window.supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-            });
-
-            if (error) {
-                alert('Signup error: ' + error.message);
-                return;
-            }
-
-            const user = data.user;
-
-            // Insert additional data into 'users' table
-            const insertResponse = await fetch(`${BASE_URL}/rest/v1/users`, {
-                method: 'POST',
-                headers: {
-                    'apikey': API_KEY,
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: user.id,
-                    email: email,
-                    name: name,
-                    password_hash: password, // (Optionally hash this if security is a concern)
-                    created_at: new Date().toISOString()
-                })
-            });
-
-            if (insertResponse.ok) {
-                alert('Signup successful!');
-                window.location.href = 'login.html';
-            } else {
-                alert('Error saving user details.');
-            }
-        }
-    </script>
+    <footer>
+        <div class="social-icons">
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+            <a href="#"></a>
+        </div>
+        <nav class="footer-nav">
+            <a href="#">About</a>
+            <a href="#">Features</a>
+            <a href="#">Gallery</a>
+            <a href="#">Team</a>
+        </nav>
+        <button class="contact-btn">Contact Us</button>
+        <p>&copy; All rights reserved</p>
+    </footer>
 </body>
-
 </html>
