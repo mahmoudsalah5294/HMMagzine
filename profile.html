@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <title>Profile (Supabase)</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f1efee;
+        }
+
+        #wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .user-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .auth-buttons {
+            margin-top: 20px;
+        }
+
+        .auth-buttons button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-button {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .signup-button {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+
+        <header>
+            <h2>Profile</h2>
+        </header>
+
+        <main id="profile-container">
+            <!-- Profile data will be loaded here -->
+        </main>
+
+        <footer id="footer">
+            <!-- Footer will be injected here -->
+        </footer>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./core/supabase.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+
+            const profileContainer = document.getElementById('profile-container');
+
+            if (!session || !session.user) {
+                profileContainer.innerHTML = `
+                    <div style="text-align: center; margin-top: 50px;">
+                        <h3>You are not logged in</h3>
+                        <div class="auth-buttons">
+                            <button class="login-button" onclick="redirectToLogin()">Login</button>
+                            <button class="signup-button" onclick="redirectToSignup()">Sign Up</button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const user = session.user;
+
+            profileContainer.innerHTML = `
+                <div class="user-card">
+                    <h4>User Details</h4>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>User ID:</strong> ${user.id}</p>
+                    <p><strong>Role:</strong> ${user.role}</p>
+                    <p><strong>Email Confirmed At:</strong> ${user.email_confirmed_at || 'Not Confirmed'}</p>
+                    <p><strong>Created At:</strong> ${user.created_at}</p>
+                    <p><strong>Last Sign In At:</strong> ${user.last_sign_in_at}</p>
+                    <button class="logout-button" onclick="logout()">Logout</button>
+                </div>
+            `;
+        });
+
+        async function logout() {
+            const { error } = await window.supabaseClient.auth.signOut();
+            if (error) {
+                alert('Error during logout: ' + error.message);
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
+        
+
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        function redirectToSignup() {
+            window.location.href = 'signup.html';
+        }
+    </script>
+
+    <script type="module">
+        import { injectHeader } from './core/header.js';
+        import { injectFooter } from './core/footer.js';
+        injectHeader();
+        injectFooter();
+    </script>
+
+</body>
+
+</html>

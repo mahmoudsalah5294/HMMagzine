@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+  <meta charset="utf-8">
+  <title>Offer List (Supabase)</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="img/favicon.ico">
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1efee;
+    }
+
+    #wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .offer-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .offer-content {
+      max-width: 85%;
+    }
+
+    .offer-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .heart-icon {
+      font-size: 24px;
+      color: red;
+      cursor: pointer;
+    }
+
+    .favorited {
+      color: #e60023;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+
+    .update-button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="wrapper">
+
+    <header>
+      <h2>Favourites</h2>
+    </header>
+
+    <main id="offers-container">
+      <!-- Offers will be loaded here -->
+    </main>
+
+    <footer id="footer">
+      <!-- Footer will be injected here -->
+    </footer>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./core/supabase.js"></script>
+  <script>
+    // Load offers when page is ready
+    document.addEventListener('DOMContentLoaded', async () => {
+      window.supabaseClient.auth.onAuthStateChange((event, session) => {
+        console.log('Auth state changed:', event, session);
+        if (session) {
+          fetchFavorites();
+        } else {
+          displayNotLoggedIn();
+        }
+      });
+
+      const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+      console.log('Session on load:', session);
+
+      if (session) {
+        fetchFavorites();
+      } else {
+        displayNotLoggedIn();
+      }
+    });
+
+    async function fetchFavorites() {
+      const { data: { session } } = await window.supabaseClient.auth.getSession();
+      if (!session) {
+        displayNotLoggedIn();
+        return;
+      }
+
+      const { data: favorites, error } = await window.supabaseClient
+        .from('favorites')
+        .select(`
+      id,
+      hypermarkets:hypermarket_id (
+        id, name, location, phone, description, website
+      )
+    `)
+        .eq('user_id', session.user.id);
+
+      if (error) {
+        console.error('Error fetching favorites:', error);
+        return;
+      }
+
+      if (!favorites || favorites.length === 0) {
+        displayNoFavorites();
+        return;
+      }
+
+      const favourites = favorites.map(fav => ({
+        favorite_id: fav.id,
+        ...fav.hypermarkets
+      }));
+
+      displayFavourites(favourites);
+    }
+
+
+    function displayNoFavorites() {
+      const container = document.getElementById('offers-container');
+      container.innerHTML = `
+    <div style="text-align: center; margin-top: 50px;">
+      <h3>You have no favorite offers yet.</h3>
+      <button onclick="redirectToHome()" style="padding: 10px 20px; font-size: 16px;">Go to Home</button>
+    </div>
+  `;
+    }
+
+    function redirectToHome() {
+      window.location.href = 'index.html'; // Change this to your main offers page
+    }
+
+
+    function displayFavourites(favourites) {
+      const container = document.getElementById('offers-container');
+      container.innerHTML = '';
+
+      favourites.forEach(offer => {
+        const offerCard = document.createElement('div');
+        offerCard.className = 'offer-card';
+
+        offerCard.innerHTML = `
+          <div class="offer-content">
+              <div class="offer-title">${offer.title}</div>
+              <div class="offer-description">${offer.description}</div>
+              <div class="offer-price">Price: $${offer.price} | Discount: ${offer.discount}%</div>
+          </div>
+          <div>
+              <span class="heart-icon favorited" onclick="removeFavorite('${offer.favorite_id}')">&#10084;</span>
+          </div>
+        `;
+
+        container.appendChild(offerCard);
+      });
+    }
+
+    async function removeFavorite(favoriteId) {
+      if (!confirm('Are you sure you want to remove this from your favorites?')) return;
+
+      const { error } = await window.supabaseClient
+        .from('favorites')
+        .delete()
+        .eq('id', favoriteId);
+
+      if (error) {
+        alert('Failed to remove favorite.');
+      } else {
+        alert('Favorite removed successfully!');
+        fetchFavorites(); // Refresh list
+      }
+    }
+
+    function displayNotLoggedIn() {
+      const container = document.getElementById('offers-container');
+      container.innerHTML = `
+        <div style="text-align: center; margin-top: 50px;">
+            <h3>You are not logged in</h3>
+            <button onclick="redirectToLogin()" style="padding: 10px 20px; font-size: 16px;">Login</button>
+        </div>
+      `;
+    }
+
+    function redirectToLogin() {
+      window.location.href = 'login.html';
+    }
+  </script>
+
+  <script type="module">
+    import { injectHeader } from './core/header.js';
+    import { injectFooter } from './core/footer.js';
+    injectHeader();
+    injectFooter();
+  </script>
+
+</body>
+
+</html>
