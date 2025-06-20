@@ -10,12 +10,73 @@
     <header>
        
     </header>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./core/supabase.js"></script>
+     <script>
+        async function signup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
+            //print(name +email+password+phone)
 
+            if (!name || !email || !password) {
+                alert('Please fill all fields');
+                return;
+            }
+
+            // Sign up with Supabase Auth
+            const { data, error } = await window.supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+            });
+
+            if (error) {
+                alert('Signup error: ' + error.message);
+                return;
+            }
+
+            const user = data.user;
+
+            // Insert additional data into 'users' table
+            const insertResponse = await fetch(`${BASE_URL}/rest/v1/users`, {
+                method: 'POST',
+                headers: {
+                    'apikey': API_KEY,
+                    'Authorization': `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: user.id,
+                    email: email,
+                    name: name,
+                    phone:phone,
+                    password_hash: password, 
+                    created_at: new Date().toISOString()
+                })
+            });
+
+            if (insertResponse.ok) {
+                alert('Signup successful!');
+               window.location.href = 'index.html';
+                if (insertError) {
+                    console.error('Error inserting user:', insertError.message);
+                } else {
+                  console.log('User added to users table.');
+                  window.location.href = 'index.html';
+
+                }
+            } else {
+                  window.location.href = 'index.html';
+
+            }
+        }
+    </script>
     <main>
         <section class="form-container">
             <h1>CREATE YOUR ACCOUNT</h1>
             <p>Please enter your details.</p>
-            <form>
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" placeholder="Enter your name">
@@ -32,8 +93,7 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password">
                 </div>
-                <button type="submit">Register</button>
-            </form>
+                <button onclick="signup()">Register</button>
         </section>
     </main>
 

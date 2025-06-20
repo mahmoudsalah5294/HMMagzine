@@ -148,12 +148,12 @@
         return;
       }
 
-      const offers = favorites.map(fav => ({
+      const favourites = favorites.map(fav => ({
         favorite_id: fav.id,
         ...fav.hypermarkets
       }));
 
-      displayOffers(offers);
+      displayFavourites(favourites);
     }
 
 
@@ -162,7 +162,7 @@
       container.innerHTML = `
     <div style="text-align: center; margin-top: 50px;">
       <h3>You have no favorite offers yet.</h3>
-      <button onclick="redirectToHome()" style="padding: 10px 20px; font-size: 16px;">Go to Offers</button>
+      <button onclick="redirectToHome()" style="padding: 10px 20px; font-size: 16px;">Go to Home</button>
     </div>
   `;
     }
@@ -172,11 +172,11 @@
     }
 
 
-    function displayOffers(offers) {
+    function displayFavourites(favourites) {
       const container = document.getElementById('offers-container');
       container.innerHTML = '';
 
-      offers.forEach(offer => {
+      favourites.forEach(offer => {
         const offerCard = document.createElement('div');
         offerCard.className = 'offer-card';
 
