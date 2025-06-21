@@ -31,7 +31,7 @@ async function fetchAndRenderMarkets() {
         markets.forEach(market => {
             const marketHtml = `
                 <div class="box-wrapper">
-                <a href="${market.dir_url}" class="market-link">
+                <a href="offers.html?marketName=${encodeURIComponent(market.market_name)}" class="market-link">
                     <div class="box">
                         <img src="${market.logo_image_url}" 
                              alt="${market.market_name} Logo" 
