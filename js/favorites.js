@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else {
     displayNotLoggedIn();
   }
+
+    setupImageModal(); 
 });
 
 async function fetchFavorites() {
@@ -66,11 +68,13 @@ function displayFavourites(offers) {
     const offerCard = document.createElement('div');
     offerCard.className = 'offer-card';
 
+
     offerCard.innerHTML = `
       <div class="offer-content">
         <div class="offer-title">${offer.market_name || 'Unnamed Offer'}</div>
-        <div><img src="${offer.image_url}" alt="Offer Image" style="max-width: 100%; border-radius: 8px;"></div>
-      </div>
+        <div><img  onclick="openImageModal('${offer.image_url}')" src="${offer.image_url}" alt="Offer Image" style="max-width: 100%; border-radius: 8px;"></div>
+
+        </div>
       <div>
         <span class="heart-icon favorited" onclick="removeFavorite('${offer.favorite_id}')">&#10084;</span>
       </div>
@@ -78,6 +82,8 @@ function displayFavourites(offers) {
 
     container.appendChild(offerCard);
   });
+
+  
 }
 
 async function removeFavorite(favoriteId) {
@@ -112,4 +118,36 @@ function redirectToLogin() {
 
 function redirectToHome() {
   window.location.href = 'index.html';
+}
+function setupImageModal() {
+  document.body.insertAdjacentHTML('beforeend', `
+    <div id="image-modal" class="image-modal">
+      <span class="close-modal">&times;</span>
+      <img class="modal-content" id="modal-image">
+    </div>
+  `);
+
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-image');
+  const closeModal = document.querySelector('.close-modal');
+
+  // Event delegation for dynamically created images
+
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+}
+
+function openImageModal(imageUrl) {
+  const modal = document.getElementById('image-modal');
+  const modalImg = document.getElementById('modal-image');
+  modal.style.display = 'block';
+  modalImg.src = imageUrl;
 }
