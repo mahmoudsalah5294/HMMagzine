@@ -61,23 +61,72 @@ async function renderOffers(marketName) {
     let currentOfferIndex = 0;
 
     const FAVORITES_KEY = 'hm_mag_favorites';
-    let favorites = JSON.parse(localStorage.getItem(FAVORITES_KEY)) || [];
+    let favorites = [];
 
-    function isFavorited(offer) {
-        return favorites.includes(offer.image_url);
+    async function fetchFavorites() {
+        const userId = localStorage.getItem('user_id');
+        const response = await fetch(`${BASE_URL}/rest/v1/favorites?user_id=eq.${userId}`, {
+            headers: {
+                apikey: API_KEY,
+                Authorization: `Bearer ${API_KEY}`
+            }
+        });
+        if (response.ok) {
+            favorites = await response.json();
+        } else {
+            favorites = [];
+        }
     }
 
-    function toggleFavorite(offer, button) {
-        const offerId = offer.image_url;
-        if (isFavorited(offer)) {
-            favorites = favorites.filter(favId => favId !== offerId);
+
+
+ 
+    function isFavorited() {
+        const offer = offers[currentOfferIndex];
+         return favorites.some(fav => fav.offer_id === offer.id);
+    }
+
+ 
+   async function toggleFavorite(  button) {
+        const offer = offers[currentOfferIndex];
+        const userId = localStorage.getItem('user_id');
+        const isFav = isFavorited( offer);
+        const favUrl = `${BASE_URL}/rest/v1/favorites`;
+
+        if (isFav) {
+            // remove favorite
+            await fetch(`${favUrl}?user_id=eq.${userId}&offer_id=eq.${offer.id}`, {
+                method: 'DELETE',
+                headers: {
+                    apikey: API_KEY,
+                    Authorization: `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json',
+                    Prefer: 'return=representation'
+                }
+            });
             button.classList.remove('favorited');
         } else {
-            favorites.push(offerId);
+            // add favorite
+            await fetch(favUrl, {
+                method: 'POST',
+                headers: {
+                    apikey: API_KEY,
+                    Authorization: `Bearer ${API_KEY}`,
+                    'Content-Type': 'application/json',
+                    Prefer: 'return=representation'
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    offer_id: offer.id
+                })
+            });
             button.classList.add('favorited');
         }
-        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+
+        // refresh favorites
+        await fetchFavorites(offer.id);
     }
+
 
     function showOffer(index) {
         if (offers.length === 0) {
@@ -103,14 +152,16 @@ async function renderOffers(marketName) {
             favBtn.setAttribute('aria-label', 'Add to favorites');
             favBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
             
-            if (isFavorited(offer)) {
+           
+            if (isFavorited( offer)) {
                 favBtn.classList.add('favorited');
             }
 
-            favBtn.addEventListener('click', (e) => {
+            favBtn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                toggleFavorite(offer, favBtn);
+                await toggleFavorite(  favBtn);
             });
+            
             offerContainer.appendChild(favBtn);
 
             setTimeout(() => img.style.opacity = 1, 50);
@@ -139,6 +190,9 @@ async function renderOffers(marketName) {
         });
         if (!response.ok) throw new Error('Failed to fetch offers');
         offers = await response.json();
+        if (offers.length > 0) {
+            await fetchFavorites();
+        }
 
         showOffer(currentOfferIndex);
 
