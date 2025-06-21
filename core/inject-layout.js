@@ -110,7 +110,7 @@ function injectHeader() {
       <div class="header-right">
       <span class="header-icon" onclick="window.location.href='notifications.html'" title="Notifications">&#128276;</span>
       <span class="header-icon" onclick="window.location.href='favourites.html'" title="Favorites">&#10084;&#65039;</span>
-      <span class="header-icon" title="Account">&#128100;</span>
+      <span class="header-icon" onclick="window.location.href='profile.html'" title="Account">&#128100;</span>
       </div>
 
       </div>
