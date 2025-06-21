@@ -29,7 +29,7 @@
     
   <section class="contact-form-section">
             <h2>Send Us a Message</h2>
-            <form action="#" method="POST" class="contact-form">
+            <form action="#" method="POST" class="contact-form" id="contactForm">
                 <div class="form-group">
                     <label for="name">Your Name:</label>
                     <input type="text" id="name" name="name" required>
@@ -48,6 +48,7 @@
                 </div>
                 <button type="submit" class="submit-button">Send Message</button>
             </form>
+            <div id="formMessage" class="form-message"></div> 
         </section>
 
         <section class="contact-info-section">
@@ -64,6 +65,10 @@
   <footer>
 
   </footer>    
-  <script src="core/inject-layout.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./core/supabase.js"></script>
+<script src="core/inject-layout.js"></script>
+<script src="js/contactForm.js"></script>
     </body>
 </html>
