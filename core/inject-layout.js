@@ -296,7 +296,7 @@ function injectHeader() {
                     <!-- Centered Menu -->
                     <nav class="footer-nav">
                         <ul>
-                            <li><a href="#">About Us</a></li>
+                            <li><a href="about.html">About Us</a></li>
                             <li><a href="#">Project Team</a></li>
                         </ul>
                     </nav>
