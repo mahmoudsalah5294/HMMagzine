@@ -15,7 +15,6 @@
 
         <link href="css/bootstrap.min.css" rel="stylesheet" />
         <link href="css/style.css" rel="stylesheet" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"  />
         <link rel="shortcut icon" href="img/favicon.ico">
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
         <script src="./core/supabase.js"></script>
@@ -52,7 +51,7 @@
    
   </div>
   <div class="view-all-button-container">
-    <a href="offer.html" class="view-all-button">View All Offers</a>
+    <a href="offers_grid.html?filter=is_featured" class="view-all-button">View All Offers</a>
   </div>
 </section>
 
@@ -60,22 +59,19 @@
   <h2 class="browse-title">BROWSE BY</h2>
   <div class="browse-boxes-container">
     <div class="browse-box browse-box-40">
-      <a href="hot-deals.html" class="box-link"> <div class="box-content">
+      <a href="offers_grid.html?filter=hot_deals" class="box-link"> <div class="box-content">
           <h3 class="box-inner-title">Hot Deals</h3>
           <img src="images/icons/hotdeals.png" alt="Icon 1" class="box-icon" />
         </div>
       </a>
     </div>
     <div class="browse-box browse-box-60">
-      <a href="expiring-soon.html" class="box-link"> <div class="box-content">
+      <a href="offers_grid.html?filter=expiration_date" class="box-link"> <div class="box-content">
           <h3 class="box-inner-title">Expiring Soon</h3>
           <img src="images/icons/exsoon.png" alt="Icon 2" class="box-icon" />
         </div>
       </a>
     </div>
-    
-    
-  </div>
 </section>
   
    

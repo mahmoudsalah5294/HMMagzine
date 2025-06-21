@@ -1,16 +1,25 @@
 // Injects the footer bar into the DOM dynamically
 export function injectFooter() {
+  if (document.querySelector('#main-footer')) return;
+
+  if (!document.querySelector('link[href*="font-awesome"]')) {
+    const fontAwesomeLink = document.createElement('link');
+    fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css';
+    fontAwesomeLink.rel = 'stylesheet';
+    document.head.appendChild(fontAwesomeLink);
+  }
+
   const footerHTML = `
     <style>
       .main-footer {
-    background-color: #5BC3C3; 
-    padding: 40px 20px; 
+    background-color: #7cc3c3; 
+    padding: 10px; 
     position: relative; 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
     text-align: center; 
-    min-height: 200px; 
+    min-height: 50px; 
 }
 
 .footer-content-wrapper {
@@ -162,7 +171,7 @@ export function injectFooter() {
     }
 }
     </style>
-    <div class="main-footer">
+    <div id="main-footer" class="main-footer">
                 <div class="footer-content-wrapper">
                     <!-- Social Media Icons -->
                     <div class="social-icons">

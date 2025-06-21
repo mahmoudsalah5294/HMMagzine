@@ -91,7 +91,6 @@ export function injectHeader() {
         <nav class="header-nav">
           <a href="#">Offers</a>
           <a href="#">Markets</a>
-          <a href="#">Categories</a>
         </nav>
       </div>
       <div class="header-center">
