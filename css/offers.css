@@ -1,0 +1,173 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fafafa;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin: 20px auto 0 auto;
+    max-width: 900px;
+    padding: 24px;
+    min-height: 120px; /* To prevent layout shift while loading */
+}
+
+.logo {
+    width: 110px;
+    height: auto;
+    margin-right: 32px;
+}
+
+.header-info h1 {
+    margin: 0 0 8px 0;
+    font-size: 2rem;
+    color: #222;
+}
+
+.header-info p {
+    margin: 4px 0;
+    color: #444;
+    font-size: 1rem;
+}
+
+.header-info a {
+    color: #0074d9;
+    text-decoration: none;
+}
+
+.offers-title {
+    max-width: 900px;
+    margin: 32px auto 16px auto;
+    font-size: 1.7rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.offers-grid {
+    display: none; /* Hide old grid */
+}
+
+.offer-item {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: box-shadow 0.2s;
+}
+
+.offer-item:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.magazine-preview img {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+}
+
+.offer-viewer {
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.offer-image-container {
+    width: 100%;
+    max-width: 500px; /* Adjust as needed */
+    height: 600px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    position: relative;
+}
+
+.offer-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Use contain to see the whole image */
+    transition: opacity 0.4s ease-in-out;
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #eee;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: transform 0.2s, background-color 0.2s;
+    padding: 0;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.1);
+    background: #fff;
+}
+
+.favorite-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: #333;
+    fill: none;
+    transition: fill 0.2s, stroke 0.2s;
+}
+
+.favorite-btn.favorited svg {
+    fill: #7cc3c3;
+    stroke: #7cc3c3;
+}
+
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.prev-btn:hover, .next-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+} 

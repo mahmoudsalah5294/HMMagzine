@@ -12,7 +12,9 @@ function injectHeader() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          width: 100%;
+          width: calc(100% + 60px);
+          margin-left: -30px;
+          margin-right: -30px;
           box-sizing: border-box;
         }
         .header-left {
@@ -95,8 +97,8 @@ function injectHeader() {
             <span class="header-logo">HMM</span>
           </a>
           <nav class="header-nav">
-            <a href="#">Offers</a>
-            <a href="#">Markets</a>
+            <a href="offers.html">Offers</a>
+            <a href="Market_page.html">Markets</a>
           </nav>
         </div>
         <div class="header-center">
@@ -125,7 +127,9 @@ function injectHeader() {
         #main-footer {
           background: #7cc3c3;
           padding: 24px 0 0 0;
-          width: 100%;
+          width: calc(100% + 60px);
+          margin-left: -30px;
+          margin-right: -30px;
           box-sizing: border-box;
           text-align: center;
           position: relative;
@@ -217,6 +221,22 @@ function injectHeader() {
   
   // Inject on page load
   function injectLayout() {
+    const styleId = 'global-page-styles';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        html {
+          background-color: #FAFAFA;
+        }
+        body {
+          margin: 0 30px;
+          background-color: #FAFAFA;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
     injectHeader();
     injectFooter();
   }
