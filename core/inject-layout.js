@@ -97,8 +97,8 @@ function injectHeader() {
             <span class="header-logo">HMM</span>
           </a>
           <nav class="header-nav">
-            <a href="#">Offers</a>
-            <a href="#">Markets</a>
+            <a href="offers.html">Offers</a>
+            <a href="Market_page.html">Markets</a>
           </nav>
         </div>
         <div class="header-center">
