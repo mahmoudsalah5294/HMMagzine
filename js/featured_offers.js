@@ -14,8 +14,8 @@ async function fetchAndRenderFeaturedOffers() {
     try {
 
         const { data: offers, error } = await supabase
-            .from('offers')
-            .select('title, image_url, offer_url, is_featured')
+            .from('offer_images')
+            .select('market_name, image_url, is_featured')
             .eq('is_featured', true);
         if (error) {
             throw error;
@@ -32,13 +32,13 @@ async function fetchAndRenderFeaturedOffers() {
         offers.forEach(offer => {
             const offerHtml = `
                 <div class="box-wrapper">
-                    <a href="${offer.offer_url}" class="market-link">
+                    <a href="offers.html?marketName=${encodeURIComponent(offer.market_name)}" class="market-link">
                         <div class="box">
                             <img src="${offer.image_url}" 
-                                 alt="${offer.title}" 
+                                 alt="${offer.market_name}" 
                                  onerror="this.onerror=null; this.src='https://placehold.co/295x298/cccccc/333333?text=Image+Not+Found';" />
                         </div>
-                        <p class="box-name">${offer.title}</p> <!-- Updated to offer.title -->
+                        <p class="box-name">${offer.market_name}</p> <!-- Updated to offer.market_name -->
                         
                     </a>
                 </div>
