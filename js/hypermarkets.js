@@ -1,3 +1,4 @@
+(async () => {
 const supabase = window.supabaseClient; 
 const hyperMarketsContainer = document.getElementById('hyperMarketsContainer');
 
@@ -53,3 +54,4 @@ async function fetchAndRenderMarkets() {
 }
 
 document.addEventListener('DOMContentLoaded', fetchAndRenderMarkets);
+})();

@@ -11,10 +11,7 @@ body {
     line-height: 1.6;
 }
 
-header {
-    background-color: #00a8b5;
-    padding: 10px 20px;
-}
+
 
 .top-bar {
     display: flex;
@@ -113,13 +110,7 @@ button:hover {
     background-color: #e60000;
 }
 
-footer {
-    background-color: #00a8b5;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    margin-top: 50px;
-}
+
 
 .social-icons a {
     color: white;

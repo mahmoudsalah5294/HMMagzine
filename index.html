@@ -44,46 +44,14 @@
 
 <section class="featured-offers-section">
   <h1 class="header-title">Featured Offers</h1>
-  <div class="boxes-container">
-    <div class="box-wrapper">
-      <div class="box">
-        <img src="images/offers/laptophp.png" alt="Featured Offer 1" />
-      </div>
-      <p class="box-name">Product A</p>
-      <p class="box-offers">
-        <del class="original-price">$1000.00</del> <span class="discounted-price">$800.00</span> <span class="discount-percentage">20%</span>
-	</p>
-    </div>
-    <div class="box-wrapper">
-      <div class="box">
-        <img src="images/offers/tshirt.png" alt="Featured Offer 2" />
-      </div>
-      <p class="box-name">Product B</p>
-      <p class="box-offers">
-        <del class="original-price">$300.00</del> <span class="discounted-price">$210.00</span> <span class="discount-percentage">30%</span>
-	</p>
-    </div>
-    <div class="box-wrapper">
-      <div class="box">
-        <img src="images/offers/refre.png" alt="Featured Offer 3" />
-      </div>
-      <p class="box-name">Product C</p>
-      <p class="box-offers">
-        <del class="original-price">$2000.00</del> <span class="discounted-price">$1500.00</span> <span class="discount-percentage">25%</span>
-	</p>
-    </div>
-    <div class="box-wrapper">
-      <div class="box">
-        <img src="images/offers/jeans.png" alt="Featured Offer 4" />
-      </div>
-      <p class="box-name">Product D</p>
-      <p class="box-offers">
-        <del class="original-price">$250.00</del> <span class="discounted-price">$205.00</span> <span class="discount-percentage">18%</span>
-	</p>
-    </div>
+  <div class="boxes-container" id="featuredOffersContainer">
+
+      <p class="loading-message">Loading featured offers...</p>
+
+   
   </div>
   <div class="view-all-button-container">
-    <a href="view-all-offers.html" class="view-all-button">View All Offers</a>
+    <a href="offer.html" class="view-all-button">View All Offers</a>
   </div>
 </section>
 
@@ -124,9 +92,12 @@
    
   <footer>
 
-  </footer>    
+  </footer>   
+   <script src="js/hyperMarkets.js"></script>
+  <script src="js/featured_offers.js"></script> 
   <script src="core/inject-layout.js"></script>
-  <script src="js/hyperMarkets.js"></script>
+ 
+  
   
     </body>
 </html>
