@@ -17,6 +17,7 @@
         <link href="css/style.css" rel="stylesheet" />
         <link rel="shortcut icon" href="img/favicon.ico">
         <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script src="./core/supabase.js"></script>
 
           
 </head>
@@ -31,38 +32,13 @@
 
 <section>
   <h1 class="header-title">Hyper Markets</h1>
-  <div class="boxes-container">
-    <div class="box-wrapper">
-      <div class="box">
-	<img src="images/hypers/carfour.png" alt="Hyper Market Image" />
-      </div>
-      <p class="box-name">Hyper 1 Name</p>
-      <p class="box-offers">8 Offers</p>
-    </div>
-    <div class="box-wrapper">
-      <div class="box">
-	<img src="images/hypers/walmart.png" alt="Hyper Market Image" />
-      </div>
-      <p class="box-name">Hyper 2 Name</p>
-      <p class="box-offers">12 Offers</p>
-    </div>
-    <div class="box-wrapper">
-      <div class="box">
-	<img src="images/hypers/metro.png" alt="Hyper Market Image" />
-      </div>
-      <p class="box-name">Hyper 3 Name</p>
-      <p class="box-offers">10 Offers</p>
-    </div>
-    <div class="box-wrapper">
-      <div class="box">
-	<img src="images/hypers/hyperstar.png" alt="Hyper Market Image" />
-      </div>
-      <p class="box-name">Hyper 4 Name</p>
-      <p class="box-offers">15 Offers</p>
-    </div>
+  <div class="boxes-container" id="hyperMarketsContainer">
+
+     <p class="loading-message">Loading hyper markets...</p>
+
 </div>
 <div class="view-all-button-container">
-    <a href="view-all-Hypers.html" class="view-all-button">View All Hypers</a>
+    <a href="Market_page.html" class="view-all-button">View All Hypers</a>
   </div>
 </section>
 
@@ -150,10 +126,7 @@
 
   </footer>    
   <script src="core/inject-layout.js"></script>
-  <script>
-const SUPABASE_URL = 'https://qfjtrlvwwktkpyofbpaq.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmanRybHZ3d2t0a3B5b2ZicGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzOTgwODEsImV4cCI6MjA2NDk3NDA4MX0.hQU63u38d4LadR1p0W8TUJEIg6MrhhJXAUJBDwF6iXQ';
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  </script>
+  <script src="js/hyperMarkets.js"></script>
+  
     </body>
 </html>
