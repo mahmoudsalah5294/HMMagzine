@@ -123,98 +123,196 @@ function injectHeader() {
     if (document.querySelector('#main-footer')) return;
     
     const footerHTML = `
-      <style>
-        #main-footer {
-          background: #7cc3c3;
-          padding: 24px 0 0 0;
-          width: calc(100% + 60px);
-          margin-left: -30px;
-          margin-right: -30px;
-          box-sizing: border-box;
-          text-align: center;
-          position: relative;
-        }
-        .footer-icons {
-          display: flex;
-          justify-content: center;
-          gap: 22px;
-          margin-bottom: 8px;
-        }
-        .footer-icons svg {
-          width: 28px;
-          height: 28px;
-          stroke: #222;
-          fill: none;
-        }
-        .footer-nav {
-          display: flex;
-          justify-content: center;
-          gap: 32px;
-          margin-bottom: 0;
-          font-size: 16px;
-          font-family: 'Arial', sans-serif;
-          color: #222;
-        }
-        .footer-nav span {
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .footer-nav span:hover {
-          color: #444;
-        }
-        .footer-contact {
-          position: absolute;
-          right: 48px;
-          top: 38px;
-        }
-        .footer-contact button {
-          padding: 6px 22px;
-          border-radius: 18px;
-          border: 2px solid #222;
-          background: #fff;
-          font-size: 15px;
-          font-family: 'Arial', sans-serif;
-          cursor: pointer;
-          font-weight: 500;
-          transition: background 0.2s, color 0.2s;
-        }
-        .footer-contact button:hover {
-          background: #eaf6f6;
-          color: #111;
-        }
-        .footer-line {
-          margin: 32px auto 6px auto;
-          width: 95%;
-          border: none;
-          border-top: 1.5px solid #fff;
-        }
-        .footer-copy {
-          font-size: 10px;
-          color: #fff;
-          margin-bottom: 6px;
-        }
-        @media (max-width: 600px) {
-          .footer-contact { position: static; display: block; margin: 10px auto 0 auto; }
-        }
-      </style>
-      <div id="main-footer">
-        <div class="footer-icons">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 0v10l6 3"/></svg>
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16l4-4-4-4-4 4z"/></svg>
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-        </div>
-        <div class="footer-nav">
-          <span>About</span>
-          <span>Team</span>
-        </div>
-        <div class="footer-contact">
-          <button onclick="window.location.href='Contact.html'">Contact Us</button>
-        </div>
-        <hr class="footer-line" />
-        <div class="footer-copy">All Rights Reserved</div>
-      </div>
+         <style>
+      .main-footer {
+    background-color: #5BC3C3; 
+    padding: 40px 20px; 
+    position: relative; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    min-height: 200px; 
+}
+
+.footer-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px; 
+    margin: 0 auto;
+}
+
+
+.social-icons {
+    display: flex;
+    gap: 15px; 
+}
+
+.social-icons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    background-color: #FFFFFF; 
+    color: #5BC3C3; 
+    font-size: 20px; 
+    text-decoration: none; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-icons a:hover {
+    background-color: #E0E0E0; 
+    color: #333; 
+}
+
+
+.footer-nav ul {
+    list-style: none; 
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; 
+    gap: 30px; 
+}
+
+.footer-nav a {
+    font-size: 24px; 
+    color: #FFFFFF; 
+    text-decoration: none; 
+    transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+    color: #e0e0e0; 
+}
+
+
+.footer-separator {
+    width: 80%; 
+    max-width: 600px; 
+    height: 1px; 
+    background-color: #FFFFFF; 
+    margin: 20px auto; 
+}
+
+
+.footer-copyright {
+    color: #FFFFFF; 
+    font-size: 14px;
+    margin: 0;
+}
+
+
+.footer-contact-button-container {
+    position: absolute; 
+    right: 20px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+}
+
+
+.footer-contact-button-container .view-all-button {
+    background-color: #FFFFFF; 
+    border: 1px solid #FFFFFF; 
+    color: #000000; 
+    padding: 15px 30px; 
+    font-size: 16px;
+    border-radius: 62px; 
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.footer-contact-button-container .view-all-button:hover {
+    background-color: #e0e0e0; 
+    color: #333; 
+    border-color: #e0e0e0; 
+}
+
+/* Responsive Adjustments for Footer */
+@media (max-width: 768px) {
+    .main-footer {
+        padding: 30px 15px; 
+        flex-direction: column; 
+        align-items: center; 
+    }
+
+    .footer-nav ul {
+        flex-direction: column; 
+        gap: 10px; 
+    }
+
+    .footer-nav a {
+        font-size: 20px; 
+    }
+
+    .footer-contact-button-container {
+        position: static; 
+        margin-top: 20px; 
+        width: 100%; 
+        text-align: center;
+    }
+
+    .footer-contact-button-container .view-all-button {
+        width: 80%; 
+        max-width: 300px; 
+    }
+
+    .footer-separator {
+        width: 90%; 
+    }
+}
+
+@media (max-width: 480px) {
+    .main-footer {
+        padding: 20px 10px;
+    }
+    .social-icons a {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+    .footer-nav a {
+        font-size: 18px;
+    }
+    .footer-copyright {
+        font-size: 12px;
+    }
+}
+    </style>
+    <div class="main-footer">
+                <div class="footer-content-wrapper">
+                    <!-- Social Media Icons -->
+                    <div class="social-icons">
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com" target="_blank" aria-label="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+
+                    <!-- Centered Menu -->
+                    <nav class="footer-nav">
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Project Team</a></li>
+                        </ul>
+                    </nav>
+
+                    <!-- Thin White Line -->
+                    <div class="footer-separator"></div>
+
+                    <!-- Copyright Statement -->
+                    <p class="footer-copyright">All Rights Reserved</p>
+                </div>
+
+                <!-- Contact Us Button -->
+                <div class="footer-contact-button-container">
+                    <a href="contact.html" class="view-all-button">Contact Us</a>
+                </div>
+            </div>
     `;
     document.body.insertAdjacentHTML('beforeend', footerHTML);
   }
