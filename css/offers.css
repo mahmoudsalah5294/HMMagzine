@@ -1,0 +1,79 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fafafa;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin: 20px auto 0 auto;
+    max-width: 900px;
+    padding: 24px;
+}
+
+.logo {
+    width: 110px;
+    height: auto;
+    margin-right: 32px;
+}
+
+.header-info h1 {
+    margin: 0 0 8px 0;
+    font-size: 2rem;
+    color: #222;
+}
+
+.header-info p {
+    margin: 4px 0;
+    color: #444;
+    font-size: 1rem;
+}
+
+.header-info a {
+    color: #0074d9;
+    text-decoration: none;
+}
+
+.offers-title {
+    max-width: 900px;
+    margin: 32px auto 16px auto;
+    font-size: 1.7rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 28px;
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+}
+
+.offer-item {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    transition: box-shadow 0.2s;
+}
+
+.offer-item:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+
+.magazine-preview img {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+} 
