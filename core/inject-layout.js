@@ -227,11 +227,11 @@ function injectHeader() {
       style.id = styleId;
       style.textContent = `
         html {
-          background-color:rgb(255, 255, 255);
+          background-color: #FAFAFA;
         }
         body {
           margin: 0 30px;
-          background-color:rgb(255, 255, 255);
+          background-color: #FAFAFA;
         }
       `;
       document.head.appendChild(style);
