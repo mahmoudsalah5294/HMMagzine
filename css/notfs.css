@@ -1,0 +1,62 @@
+
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f1efee;
+    }
+
+    #wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 20px;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .notification-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification-message {
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .notification-type {
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+
+    .mark-read-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .read {
+      opacity: 0.6;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
