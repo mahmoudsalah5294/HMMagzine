@@ -1,4 +1,3 @@
-
 const BASE_URL = window.BASE_URL || (window.supabase && window.supabaseClient && window.supabaseClient.supabaseUrl) || 'https://qfjtrlvwwktkpyofbpaq.supabase.co';
 const API_KEY = window.API_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmanRybHZ3d2t0a3B5b2ZicGFxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDkzOTgwODEsImV4cCI6MjA2NDk3NDA4MX0.hQU63u38d4LadR1p0W8TUJEIg6MrhhJXAUJBDwF6iXQ';
 
@@ -160,6 +159,38 @@ async function renderOffers(marketName) {
             });
             
             offerContainer.appendChild(favBtn);
+
+            const shareBtn = document.createElement('button');
+            shareBtn.className = 'share-btn';
+            shareBtn.setAttribute('aria-label', 'Share Offer');
+            shareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><polyline points="16 6 12 2 8 6"></polyline><line x1="12" y1="2" x2="12" y2="15"></line></svg>`;
+
+            shareBtn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const offer = offers[currentOfferIndex];
+                const shareData = {
+                    title: `Check out this offer from ${offer.market_name}`,
+                    text: `I found a great offer from ${offer.market_name} at HMMagazine!`,
+                    url: window.location.href
+                };
+
+                try {
+                    if (navigator.share) {
+                        await navigator.share(shareData);
+                    } else {
+                        if (navigator.clipboard) {
+                            await navigator.clipboard.writeText(shareData.url);
+                            alert('Link copied to clipboard!');
+                        } else {
+                            prompt('Copy this link to share:', shareData.url);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+            });
+            
+            offerContainer.appendChild(shareBtn);
 
             setTimeout(() => img.style.opacity = 1, 50);
         };
