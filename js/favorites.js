@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', async () => {
   window.supabaseClient.auth.onAuthStateChange((event, session) => {
     if (session) {

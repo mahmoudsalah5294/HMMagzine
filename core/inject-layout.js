@@ -102,7 +102,8 @@ function injectHeader() {
         <div class="header-center">
           <div class="header-search">
             <span class="search-icon">&#128269;</span>
-            <input type="text" placeholder="Search for products..." />
+            <input type="text" id="header-market-search" placeholder="Search for Markets..." />
+
           </div>
         </div>
       <div class="header-right">
@@ -343,6 +344,20 @@ function injectHeader() {
   }
   
   injectLayout();
+  document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('header-market-search');
+  if (searchInput) {
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query) {
+          window.location.href = `Market_page.html?search=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  }
+});
+
   
   document.addEventListener('DOMContentLoaded', injectLayout);
   
