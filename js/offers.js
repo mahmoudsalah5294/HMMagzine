@@ -25,7 +25,7 @@ async function renderMarketHeader(marketName) {
         if (!market) {
             headerDiv.innerHTML = `<h1 style='color:red;text-align:center;'>Market not found</h1>`;
             offersTitle.textContent = 'Offers';
-            return;
+            return null;
         }
         
         document.title = `${market.market_name} Offers`;
@@ -35,14 +35,49 @@ async function renderMarketHeader(marketName) {
                 <h1>${market.market_name}</h1>
                 <p><strong>About ${market.market_name}</strong><br>
                 ${market.market_description || 'No description available.'}</p>
-                <p><strong>Offers Count</strong>: ${market.offers_count}</p>
+                <p id="offers-count-container"><strong>Offers Count</strong>: ${market.offers_count}</p>
+                <div id="countdown-timer" style="color: red; font-weight: bold; margin-top: 10px;"></div>
             </div>
         `;
         offersTitle.textContent = `${market.market_name} Offers`;
+
+        if (market.expiration_date) {
+            const expirationDate = new Date(market.expiration_date);
+            expirationDate.setHours(23, 59, 59, 999); // Consider end of day for expiration
+            const now = new Date();
+            const timeDiff = expirationDate.getTime() - now.getTime();
+
+            if (timeDiff > 0 && timeDiff < 24 * 60 * 60 * 1000) {
+                const countdownElement = document.getElementById('countdown-timer');
+                let countdownInterval;
+
+                const updateCountdown = () => {
+                    const now = new Date();
+                    const diff = expirationDate.getTime() - now.getTime();
+
+                    if (diff <= 0) {
+                        countdownElement.innerHTML = "Offers expired!";
+                        clearInterval(countdownInterval);
+                        return;
+                    }
+
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                    countdownElement.innerHTML = `Offers expire in: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                };
+
+                updateCountdown();
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+        }
+        return market;
     } catch (error) {
         headerDiv.innerHTML = `<h1 style='color:red;text-align:center;'>Failed to load market info</h1>`;
         offersTitle.textContent = 'Offers';
         console.error(error);
+        return null;
     }
 }
 
@@ -74,19 +109,15 @@ async function renderOffers(marketName) {
         }
     }
 
-
-
- 
     function isFavorited() {
         const offer = offers[currentOfferIndex];
          return favorites.some(fav => fav.offer_id === offer.id);
     }
 
- 
-   async function toggleFavorite(  button) {
+    async function toggleFavorite(button) {
         const offer = offers[currentOfferIndex];
         const userId = localStorage.getItem('user_id');
-        const isFav = isFavorited( offer);
+        const isFav = isFavorited(offer);
         const favUrl = `${BASE_URL}/rest/v1/favorites`;
 
         if (isFav) {
@@ -123,7 +154,6 @@ async function renderOffers(marketName) {
         await fetchFavorites(offer.id);
     }
 
-
     function showOffer(index) {
         if (offers.length === 0) {
             offerContainer.innerHTML = '<p style="text-align:center;">No offers found.</p>';
@@ -148,14 +178,13 @@ async function renderOffers(marketName) {
             favBtn.setAttribute('aria-label', 'Add to favorites');
             favBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
             
-           
-            if (isFavorited( offer)) {
+            if (isFavorited(offer)) {
                 favBtn.classList.add('favorited');
             }
 
             favBtn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                await toggleFavorite(  favBtn);
+                await toggleFavorite(favBtn);
             });
             
             offerContainer.appendChild(favBtn);
@@ -235,9 +264,9 @@ async function renderOffers(marketName) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const market = getQueryParam('marketName');
-    if (!market) {
+document.addEventListener('DOMContentLoaded', async () => {
+    const marketName = getQueryParam('marketName');
+    if (!marketName) {
         const offerContainer = document.querySelector('.offer-image-container');
         if(offerContainer) offerContainer.innerHTML = '<p style="color:red;text-align:center;">No market specified.</p>';
         const prevBtn = document.querySelector('.prev-btn');
@@ -247,6 +276,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    renderMarketHeader(market);
-    renderOffers(market);
+    const market = await renderMarketHeader(marketName);
+    if (!market) {
+        const offerContainer = document.querySelector('.offer-image-container');
+        if (offerContainer) offerContainer.innerHTML = '';
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        return;
+    }
+    
+    if (market.expiration_date) {
+        const expirationDate = new Date(market.expiration_date);
+        expirationDate.setHours(23, 59, 59, 999);
+        const now = new Date();
+
+        if (expirationDate.getTime() < now.getTime()) {
+            const offerContainer = document.querySelector('.offer-image-container');
+            if (offerContainer) offerContainer.innerHTML = '<p style="text-align:center;">No Offers Available</p>';
+            
+            const offersCountContainer = document.getElementById('offers-count-container');
+            if (offersCountContainer) {
+                offersCountContainer.innerHTML = '<strong>Offers Count</strong>: 0';
+            }
+
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            if (prevBtn) prevBtn.style.display = 'none';
+            if (nextBtn) nextBtn.style.display = 'none';
+            return;
+        }
+    }
+
+    renderOffers(marketName);
 }); 
