@@ -27,7 +27,14 @@ async function fetchAndRenderMarkets() {
         hyperMarketsContainer.innerHTML = '';
 
         
-        markets.forEach(market => {
+        const params = new URLSearchParams(window.location.search);
+        const searchQuery = params.get('search')?.toLowerCase();
+
+        const filteredMarkets = searchQuery
+        ? markets.filter(m => m.market_name.toLowerCase().includes(searchQuery))
+        : markets;
+
+        filteredMarkets.forEach(market => {
             const marketHtml = `
                 <div class="market-card">
                 <a href="offers.html?marketName=${encodeURIComponent(market.market_name)}" class="market-link">
