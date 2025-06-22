@@ -1,4 +1,3 @@
-// Injects the header bar into the DOM dynamically
 export function injectHeader() {
   const headerHTML = `
     <style>

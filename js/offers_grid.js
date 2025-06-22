@@ -14,17 +14,15 @@ const hotDealsBtn = document.getElementById('hot-deals-btn');
 const expiringSoonBtn = document.getElementById('expiring-soon-btn');
 
 let currentPage = 0;
-const pageSize = 6; // 2 rows of 3 images
-let currentFilter = 'all'; // 'all', 'hot', 'expiring'
+const pageSize = 6;
+let currentFilter = 'all';
 let isLoading = false;
 
-// Function to get URL parameters
 function getUrlParameter(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
 }
 
-// Function to set initial filter based on URL parameter
 function getInitialFilter() {
     const filterParam = getUrlParameter('filter');
     switch (filterParam) {
@@ -48,23 +46,46 @@ async function fetchOffers(page, filter) {
         query = query.eq('is_hot', true);
     } else if (filter === 'featured') {
         query = query.eq('is_featured', true);
-    } else if (filter === 'expiration_date') {
-
+    } else if (filter === 'expiring') {
         const today = new Date();
-        const inTenDays = new Date(new Date().setDate(today.getDate() + 10)).toISOString();
+        const inTenDays = new Date();
+        inTenDays.setDate(today.getDate() + 10);
         
-        const { data: offers, error: offersError } = await supabase
-            .from('offers')
-            .select('offer_images(*)')
-            .lte('end_date', inTenDays)
+        const todayISO = today.toISOString().split('T')[0];
+        const inTenDaysISO = inTenDays.toISOString().split('T')[0];
+        
+        const { data: expiringMarkets, error: marketsError } = await supabase
+            .from('all_markets')
+            .select('market_name')
+            .gte('expiration_date', todayISO)
+            .lte('expiration_date', inTenDaysISO)
             .range(page * pageSize, (page + 1) * pageSize - 1);
         
-        isLoading = false;
-        if (offersError) {
-            console.error('Error fetching expiring offers', offersError);
+        if (marketsError) {
+            console.error('Error fetching expiring markets', marketsError);
+            isLoading = false;
             return [];
         }
-        return offers.map(o => o.offer_images).flat().filter(Boolean);
+        
+        if (!expiringMarkets || expiringMarkets.length === 0) {
+            isLoading = false;
+            return [];
+        }
+        
+        const marketNames = expiringMarkets.map(market => market.market_name);
+        
+        const { data: images, error: imagesError } = await supabase
+            .from('offer_images')
+            .select('*')
+            .in('market_name', marketNames);
+        
+        isLoading = false;
+        if (imagesError) {
+            console.error('Error fetching images for expiring markets', imagesError);
+            return [];
+        }
+        
+        return images;
     }
     
     const { data, error } = await query.range(page * pageSize, (page + 1) * pageSize - 1);
@@ -80,7 +101,7 @@ async function fetchOffers(page, filter) {
 
 function renderImages(images, append = false) {
     if (!append) {
-        gridContainer.innerHTML = ''; // Clear existing images
+        gridContainer.innerHTML = '';
     }
     images.forEach(image => {
         const imgElement = document.createElement('img');
@@ -136,11 +157,9 @@ function init() {
         }
     });
 
-    // Set initial filter and active button based on URL parameter
     const initialFilter = getInitialFilter();
     currentFilter = initialFilter;
     
-    // Set the correct active button
     switch (initialFilter) {
         case 'hot':
             setActiveButton(hotDealsBtn);
@@ -155,7 +174,6 @@ function init() {
             setActiveButton(allOffersBtn);
     }
     
-    // Load initial data
     applyFilter(initialFilter);
 }
 

@@ -1,4 +1,3 @@
-// Injects the footer bar into the DOM dynamically
 export function injectFooter() {
   if (document.querySelector('#main-footer')) return;
 

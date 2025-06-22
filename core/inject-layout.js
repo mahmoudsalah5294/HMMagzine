@@ -1,7 +1,5 @@
-// inject-layout.js
 
 function injectHeader() {
-    // Check if header is already injected
     if (document.querySelector('#main-header')) return;
     
     const headerHTML = `
@@ -119,7 +117,6 @@ function injectHeader() {
   }
   
   function injectFooter() {
-    // Check if footer is already injected
     if (document.querySelector('#main-footer')) return;
     
     const footerHTML = `
@@ -317,7 +314,6 @@ function injectHeader() {
     document.body.insertAdjacentHTML('beforeend', footerHTML);
   }
   
-  // Inject on page load
   function injectLayout() {
     const styleId = 'global-page-styles';
     if (!document.getElementById(styleId)) {
@@ -346,12 +342,9 @@ function injectHeader() {
     injectFooter();
   }
   
-  // Try to inject immediately
   injectLayout();
   
-  // Also try on DOMContentLoaded as a backup
   document.addEventListener('DOMContentLoaded', injectLayout);
   
-  // Also try on window load as a final backup
   window.addEventListener('load', injectLayout);
   
