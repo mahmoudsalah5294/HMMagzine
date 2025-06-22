@@ -297,7 +297,7 @@ function injectHeader() {
                     <nav class="footer-nav">
                         <ul>
                             <li><a href="about.html">About Us</a></li>
-                            <li><a href="#">Project Team</a></li>
+                            <li><a href="team.html">Project Team</a></li>
                         </ul>
                     </nav>
 
