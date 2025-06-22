@@ -113,3 +113,135 @@
         font-size: 1rem;
     }
 }
+
+
+
+
+/* Styles for Contact Form Messages */
+.form-message {
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease-in-out;
+    min-height: 20px; /* Prevent layout shift when empty */
+}
+
+.form-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    opacity: 1; /* Show on success */
+}
+
+.form-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    opacity: 1; /* Show on error */
+}
+
+.form-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+    opacity: 1; /* Show on info/sending */
+}
+
+/* Basic form styling (adjust as needed to match your design) */
+.contact-form {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group textarea:focus {
+    border-color: #5BC3C3; /* Highlight color on focus */
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(91, 195, 195, 0.2); /* Light shadow on focus */
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    background-color: #5BC3C3; /* Your brand color */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 62px; /* Rounded pill button */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #4AA4A4; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.contact-intro-text {
+    text-align: center;
+    max-width: 700px;
+    margin: 20px auto 40px auto;
+    font-size: 1.1em;
+    color: #666;
+    line-height: 1.8;
+}
+
+/* Responsive adjustments for the form */
+@media (max-width: 600px) {
+    .contact-form {
+        padding: 15px;
+        margin: 20px auto;
+    }
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group textarea {
+        font-size: 14px;
+        padding: 10px;
+    }
+    .submit-button {
+        font-size: 16px;
+        padding: 12px;
+    }
+    .contact-intro-text {
+        font-size: 1em;
+        padding: 0 15px;
+    }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <title>Offers Grid | Hyper Market Magazine</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Diploma Project Team">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/offers_grid.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./core/supabase.js"></script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <header>
+        </header>
+
+        <section>
+            <h1 class="header-title">Offers</h1>
+            <div class="offers-nav">
+                <button id="all-offers-btn" class="active">All Offers</button>
+                <button id="featured-btn">Featured</button>
+                <button id="hot-deals-btn">Hot Deals</button>
+                <button id="expiring-soon-btn">Expiring Soon</button>
+            </div>
+            <div id="offers-grid-container" class="grid-container">
+                <!-- Images will be injected here by JavaScript -->
+            </div>
+        </section>
+
+        <footer>
+        </footer>
+    </div>
+
+    <script src="js/offers_grid.js"></script>
+    <script src="core/inject-layout.js"></script>
+</body>
+
+</html> 
